@@ -55,8 +55,9 @@ body{
 
 .dialog__wrapper .MuiDialog-container .MuiPaper-root{
     width: 80vw;
-    height: 90vh;
+    max-height: 100vh;
     border-radius: 8px;
+    overflow: hidden;
 
 }
 

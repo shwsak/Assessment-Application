@@ -22,13 +22,19 @@ const card = (
 
 export default function AssesCreator() {
 
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const [dialogOpen, setOpen] = useState(false);
+    const handleOpen = () => {
+        setOpen(true);
+    }
+    const handleClose = () => {
+        setOpen(false);
+    }
     return (
-        <Box sx={{ width: { xs:'100%', sm:'45%', m:'31.5%' ,lg:'31.5%'} }} onClick={handleOpen}>
-            <Card variant="outlined" sx={{border:'1px dashed #DADCE0',borderRadius: '12px', background: '#F6F8FA'}}>{card}</Card>
-            <NewAssessmentDialog open={open} onClose={handleClose}/>
-        </Box>
+        <>
+            <Box sx={{ width: { xs:'100%', sm:'45%', m:'31.5%' ,lg:'31.5%'} }} onClick={handleOpen}>
+                <Card variant="outlined" sx={{border:'1px dashed #DADCE0',borderRadius: '12px', background: '#F6F8FA'}}>{card}</Card>
+            </Box>
+            <NewAssessmentDialog open={dialogOpen} onClose={handleClose}/>
+        </>
     );
 }

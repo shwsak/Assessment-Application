@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import { Box, TextField, Select, MenuItem, Chip, InputLabel, FormControl, FormHelperText, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography } from '@mui/material';
-import { Fullscreen, Label } from '@mui/icons-material';
+import { Autocomplete,Box, TextField, Select, MenuItem, Chip, InputLabel, FormControl, FormHelperText, Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography } from '@mui/material';
+import { Fullscreen, Label, CloseOutlined } from '@mui/icons-material';
 import { alpha, styled } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
-
 
 
 function NewAssessmentDialog({ open, onClose }) {
@@ -28,100 +27,149 @@ function NewAssessmentDialog({ open, onClose }) {
     setSkills(event.target.value);
   };
 
-  const handleSave = () => {
+  const handleSave = (e) => {
     // TODO: Save assessment data
-    onClose();
+    onClose(e);
   };
 
-  const handleCancel = () => {
-    onClose();
+  const handleClose = (e) => {
+    onClose(e);
   };
 
-  
 
+  const TextFieldStyled = styled(TextField)(({ theme }) => ({
+    width: '100%', marginBottom: '20px',
+    '& .MuiOutlinedInput-root': {
+      borderRadius: '8px',
+    },
+    // placeholder
+    '& .MuiOutlinedInput-input': {
+      color:"#1C4980",
+      fontSize: '14px',
 
+    },
+    '& .MuiOutlinedInput-input::placeholder': {
+      color: "#1C4980",
+    },
+
+  }));
+
+  const availableSkills = [
+    "UI/UX and Design",
+    "Frontend Development",
+    "Backend Development",
+    "Web Development",
+    "Mobile Development",
+    "Data Science",
+    "Machine Learning",
+    "Artificial Intelligence",
+    "Cloud Computing",
+  ]
   return (
-    <Dialog open={open} onClose={onClose} className='dialog__wrapper' >
-      <DialogTitle sx={{ padding: '16px 44px', borderBottom:'1px solid #DADCE0' }}>Create new assessment</DialogTitle>
-      <DialogContent>
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px' }}>
+    <Dialog open={open} onClose={handleClose} className='dialog__wrapper' >
+      <DialogTitle sx={{ padding: '16px 44px', borderBottom:'1px solid #DADCE0', fontSize:"20px" }}>Create new assessment</DialogTitle>
+      {/* close icon on left */}
+      <Box sx={{ position: 'absolute', top: '16px', right: '16px', cursor: 'pointer' }} onClick={handleClose}>
+        <CloseOutlined/>
+      </Box>
+        
+      <DialogContent sx={{overflowY:"hidden"}}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '0 20px' }}>
 
           <InputLabel sx={{width: '100%', fontWeight:500, fontSize: '16px', mb:'10px'}}>Name of Assessment</InputLabel>
-          <TextField
+          <TextFieldStyled
             placeholder="Type Here"
             variant="outlined"
             value={name}
             onChange={handleNameChange}
-            sx={{ width: '100%', marginBottom: '20px', borderRadius: '12px' }}
           />
 
-          <FormControl variant="outlined" sx={{ width: '100%', marginBottom: '20px', borderRadius: '12px' }}>
-            <InputLabel sx={{width: '100%', fontWeight:500, fontSize: '16px', mb:'10px'}}>Purpose of the test is</InputLabel>
+          <InputLabel sx={{width: '100%', fontWeight:500, fontSize: '16px', mb:'10px'}}>Purpose of the test is</InputLabel>
+          <FormControl variant="outlined" sx={{ width: '100%', marginBottom: '20px',
+            '& .MuiOutlinedInput-root': {
+              borderRadius: '8px',
+            }
+        }}>
+            <InputLabel id="purpose-label" sx={{
+              '&.MuiInputLabel-shrink': {
+                display: 'none'
+              },
+              fontSize: '14px',
+            }}>Select</InputLabel>
+            
             <Select
               labelId="purpose-label"
               id="purpose"
               value={purpose}
               onChange={handlePurposeChange}
-              label="Purpose"
+              placeholder='Select an option'
+              // label="Purpose"
             >
-              <MenuItem value="">
-              </MenuItem>
+
               <MenuItem value="assessment">Assessment</MenuItem>
               <MenuItem value="evaluation">Evaluation</MenuItem>
             </Select>
           </FormControl>
 
           <InputLabel sx={{width: '100%', fontWeight:500, fontSize: '16px', mb:'10px'}}>Description</InputLabel>
-          <TextField
-            label="Description"
+          <TextFieldStyled
             variant="outlined"
             value={description}
             onChange={handleDescriptionChange}
             placeholder="Enter assessment description"
-            sx={{ width: '100%', marginBottom: '20px', borderRadius: '12px' }}
           />
+          <InputLabel sx={{width: '100%', fontWeight:500, fontSize: '16px', mb:'10px'}}>Skills</InputLabel>
 
           <FormControl variant="outlined" sx={{ width: '100%', marginBottom: '20px', borderRadius: '12px' }}>
-            <InputLabel id="skills-label">Skills</InputLabel>
-            <Select
-              labelId="skills-label"
-              id="skills"
-              multiple
-              value={skills}
-              onChange={handleSkillsChange}
-              label="Skills"
-              renderValue={(selected) => (
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                  {selected.map((value) => (
-                    <Chip key={value} label={value} />
-                  ))}
-                </Box>
-              )}
-            >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value="React">React</MenuItem>
-              <MenuItem value="JavaScript">JavaScript</MenuItem>
-              <MenuItem value="HTML">HTML</MenuItem>
-              <MenuItem value="CSS">CSS</MenuItem>
-            </Select>
-            <FormHelperText>Select the skills required for the assessment</FormHelperText>
+              <Autocomplete
+                sx={{
+                  // chip color
+                  '& .MuiChip-root': {
+                    background: '#DDEDFF',
+                    color: '#1C4980',
+                  },
+                  // chip delete icon color
+                  '& .MuiChip-deleteIcon': {
+                    color: '#1C4980',
+                  },
+                }}
+                multiple
+                id="skills-tags"
+                options={availableSkills}
+                getOptionLabel={(option) => option}
+                defaultValue={availableSkills.slice(0, availableSkills.length - 4)}
+                renderTags={(value, getTagProps) =>
+                  value.map((option, index) => (
+                    <Chip
+                      key={index}
+                      label={option}
+                      deleteIcon={<CloseOutlined />}
+                      {...getTagProps({ index })}
+                    />
+                  ))
+                }
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    variant="outlined"
+                    // label="Multiple values"
+                    placeholder="Add skills"
+                  />
+                )}
+              />
           </FormControl>
-
-          <TextField
-            label="Description"
+          
+          <InputLabel sx={{width: '100%', fontWeight:500, fontSize: '16px', mb:'10px'}}>Duration of assessment</InputLabel>
+          <TextFieldStyled
             variant="outlined"
             value={description}
             onChange={handleDescriptionChange}
-            placeholder="Enter assessment description"
-            sx={{ width: '100%', marginBottom: '20px', borderRadius: '12px' }}
+            placeholder="HH:MM:SS"
           />
         </Box>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={handleCancel}>Cancel</Button>
-        <Button onClick={handleSave} variant="contained" color="primary">Save</Button>
+      <DialogActions sx={{padding:'20px 44px', boxShadow: '0px -4px 50px 0px rgba(0, 0, 0, 0.09)'}}>
+        <Button sx={{width:'100%', background:'#0073E6',hover:'#0073E6', color:'#fff', textTransform:'none'}} onClick={handleSave}>Save</Button>
       </DialogActions>
     </Dialog>
   );
