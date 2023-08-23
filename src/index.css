@@ -1,0 +1,62 @@
+body{
+    margin:0;
+}
+/* Side Bar CSS */
+.drawer-items__wrapper{
+    padding: 16px 20px 20px 20px;
+}
+
+.drawer-items__wrapper .drawer-items{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 12px 12px;
+}
+
+.drawer-items__wrapper .MuiDivider-root{
+    margin-top: 30px;
+}
+
+.drawer-items__wrapper .drawer-items .MuiButton-secondary{
+    margin:10px 0;
+}
+
+.mobile-drawer__title{
+    display: flex;
+    justify-content: space-between;
+    padding: 34px 20px 0 20px;
+    align-items: center
+}
+
+@media screen and (min-width:600px){
+    .drawer-items__wrapper .drawer-items svg{
+        margin-bottom: 6px;
+    
+    }
+}
+
+@media screen and (max-width:599px) {
+    .drawer-items__wrapper .drawer-items{
+        flex-direction: row;
+        justify-content: start;
+        align-items: center;
+        gap: 8px
+    }
+    .drawer-items__wrapper .drawer-items .MuiButton-secondary{
+        order: 3;
+        margin-left: auto;
+    }
+    
+}
+
+/* Dialog box css */
+
+.dialog__wrapper .MuiDialog-container .MuiPaper-root{
+    width: 80vw;
+    height: 90vh;
+    border-radius: 8px;
+
+}
+
